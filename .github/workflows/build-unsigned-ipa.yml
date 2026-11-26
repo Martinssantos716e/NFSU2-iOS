@@ -4,20 +4,29 @@ name: Build unsigned iOS prototype
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: macos-15
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Build for iPhone (unsigned)
         working-directory: NFSU2-iOS-Prototype
         run: |
-          xcodebuild -project NFSU2iOS.xcodeproj -target NFSU2iOS \
-            -configuration Release -sdk iphoneos -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+          xcodebuild \
+            -project NFSU2iOS.xcodeproj \
+            -scheme NFSU2iOS \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
 
       - name: Package unsigned IPA
         working-directory: NFSU2-iOS-Prototype
